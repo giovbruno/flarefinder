@@ -3,9 +3,6 @@ import matplotlib.pyplot as plt
 from scipy import special
 from pdb import set_trace
 
-def residual_flare(params, t, y, yerr, complexity=1):
-    return (y - exp_line(t, params, complexity=complexity))/yerr
-
 def residual_line(params, t, y, yerr):
     return (y - np.polyval([params['a'], params['b'], params['c']], t))/yerr
 
@@ -22,13 +19,6 @@ def flare_dip_residuals(par, t, data, err, complexity):
 def exp_line(t, params, complexity=1):
     return exp_doubledecay(t, params, complexity=complexity) \
          + np.polyval([params['d'], params['e'], params['f']], t)
-
-def gauss_residuals(par, t, data, err):
-
-    gaussleft = np.exp(-(t[t < par['x0']] - par['x0'])**2/(2.*par['w1']**2))
-    gaussright = np.exp(-(t[t >= par['x0']] - par['x0'])**2/(2.*par['w2']**2))
-    gauss = par['A']*np.concatenate((gaussleft, gaussright))
-    return (data - gauss - np.polyval([par['d'], par['e'], par['f']], t))/err
 
 def flare_dip(par, x, plots=False, add_flare=False):
 
@@ -116,29 +106,6 @@ def exp_doubledecay(t, pars, complexity=1, plots=False):
 
     return mod
 
-def gaussian_bump(t, par, plots=False):
-    '''
-    Asymmetric Gaussian function to incldue bumps and flat tops.
-    '''
-
-    x0 = par['g_t0']
-    dipvalid = t >= x0
-    exponent1 = -(abs(t[dipvalid] - x0)/par['g_w2'])**par['g_n']
-    exponent1[exponent1 < -100.] = -100.
-    exponent2 = -(abs(t[t < x0] - x0)/par['g_w1'])**par['g_n']
-    exponent2[exponent2 < -100.] = -100.
-
-    y = np.zeros(len(t))
-    y[dipvalid] = par['g_ampl']*np.exp(exponent1)
-    y[t < x0] = par['g_ampl']*np.exp(exponent2)
-
-    if plots and par['g_ampl'] > 0.:
-        plt.plot(t, y)
-        plt.show()
-        set_trace()
-
-    return y
-
 def exp_convolved(t, par, complexity=1, plots=False):
     '''
     Convolution of double exponential and Gaussian function, from Mendoza+2022.
@@ -205,7 +172,6 @@ def flare_eqn(t, ampl):
         eqn = np.zeros(len(t))
 
     return eqn*ampl
-
 
 def flare_model_mendoza(t, par, complexity=1, plots=False):
     '''
