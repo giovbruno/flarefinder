@@ -8,4 +8,4 @@ Among the software which makes an essential part of the algorithms:
 - Lucas Hermann Negri's [peakutils](https://pypi.org/project/PeakUtils/)
 - Guadaluper Tovar Mendoza's [Llamaradas Estelares](https://github.com/lupitatovar/Llamaradas-Estelares).
 
-Numpy, scipy, matplotlib, astropy, [LMFIT](https://lmfit.github.io/lmfit-py/index.html), pickle must also be installed. [Celerite2](https://celerite2.readthedocs.io/en/latest/index.html) is needed to test some of the detrending options.
+Numpy, scipy, matplotlib, astropy, [LMFIT](https://lmfit.github.io/lmfit-py/index.html) and pickle must also be installed. [Celerite2](https://celerite2.readthedocs.io/en/latest/index.html) is needed to test some of the detrending options.
